@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clock</title>
+
+    <link rel="stylesheet" href="css/materialize.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="" src="js/materialize.js"></script>
+
+</head>
+<body class="red white-text center">
+    <div class="row container">
+        <h1 id = "clock">00:00:00</h1>
+        <h6 id="calendar" class="right">February 8, 2018</h6>
+    </div>
+
+    <script>
+        
+
+        function updateClock(){
+
+            var countTo = new Date('16-02-2018');
+            var today = new Date();
+
+            today = today.toString();
+
+
+            var date = today.slice(0,15);
+
+            var time = today.slice(16,24);
+
+            document.getElementById('clock').innerHTML = time;
+
+            document.getElementById('calendar').innerHTML = date;
+        }
+
+        setInterval('updateClock()',1000);
+
+        
+     </script>
+</body>
+</html>
