@@ -11,26 +11,26 @@
 								class="elevation-2"
 								slot="activator"
 							>
-								<img src="/static/img/avatar/avatar-00.png" alt="admin">
+								<img src="/img/avatar/avatar-00.png" alt="admin">
 							</v-avatar>
 							<span>click to change avatar</span>
 						</v-tooltip>
 					</v-layout>
 						
 					<h3 class="text-xs-center display-2 capitalize" primary-title>
-						{{user.name}}
+						Aidan Moroney
 						<v-btn flat icon color="grey darken-1" @click.stop="nameDialog = true">
 							<v-icon>mdi-pen</v-icon>
 						</v-btn>
 					</h3>
 					<p class="text-xs-center headline">
-						{{user.username}}
+						@balbriggan123
 						<v-btn flat icon color="grey darken-1" @click.stop="usernameDialog = true">
 							<v-icon>mdi-pen</v-icon>
 						</v-btn>
 					</p>
 					<p class="text-xs-center">
-						{{user.email}} | {{user.adminLevel}} | {{user.dateCreated}}
+						user@digiskills.ie | --------------- | 14, May 2018
 					</p>
 				</v-card>
 			</v-layout>
@@ -57,7 +57,7 @@
 					<v-card-actions>
 						<v-btn color="grey darken-3" flat @click.stop="usernameDialog = false">cancel</v-btn>
 						<v-spacer></v-spacer>
-						<v-btn color="primary" :loading="isUpdating" :disabled="!usernameValid" @click.native="updateProfile('username')">Update</v-btn>
+						<v-btn color="primary" :loading="isUpdating"  @click.native="updateProfile('username')">Update</v-btn>
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
@@ -86,7 +86,7 @@
 					<v-card-actions>
 						<v-btn color="grey darken-3" flat @click.stop="nameDialog = false">cancel</v-btn>
 						<v-spacer></v-spacer>
-						<v-btn color="primary" :loading="isUpdating" :disabled="!nameValid" @click.native="updateProfile('name')">Update</v-btn>
+						<v-btn color="primary" :loading="isUpdating"  @click.native="updateProfile('name')">Update</v-btn>
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
@@ -128,7 +128,8 @@ export default {
 					}
 				})
 				.catch(err => {
-					console.log(err);
+					//console.log(err);
+					alert(err);
 					this.isUpdating = false;
 					this.showSnackbar(`Error updating ${field}`, 'red accent-1');
 				});

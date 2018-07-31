@@ -19,7 +19,7 @@
         </v-list-tile>
   </v-btn>
       <v-container>
-                <v-text-field :flat="mini" solo name="search" label="Search console" single-line hide-details prepend-icon="mdi-magnify"></v-text-field>
+                <v-text-field  solo name="search" label="Search console" single-line hide-details prepend-icon="search"></v-text-field>
             </v-container>
       <v-list v-for="(item, i) in items"
           :key="i">
@@ -63,6 +63,15 @@
       </v-btn>
     </v-toolbar>
     <v-content>
+      <v-container v-if="status.active ==0">
+        <Loader/>
+      </v-container>
+      <v-container v-if="status.active ==1.2">
+        <Course/>
+      </v-container>
+      <v-container v-if="status.active == 4">
+        <Profile/>
+      </v-container>
       <v-container v-if="status.active == 1">
           <v-container>
               <v-card>
@@ -73,14 +82,15 @@
           </v-container>
 
           <v-container>
-            <Courses />
+            <Courses v-bind:active="status.active"  @update="printUpdate()"/>
           </v-container>
+
       </v-container>
 
       <v-container v-if="status.active == 2">
         <MailBox/>
       </v-container>
-      <v-container>
+      <v-container> 
       <CreateCourse v-if="status.active == 1.1"/>
       </v-container>
     </v-content>
@@ -92,17 +102,17 @@
       app
     >
       <v-list>
-        <v-list-tile @click="right = !right">
+        <v-list-tile>
           <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
+            <v-icon></v-icon>
           </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
+          <v-list-tile-title></v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
+    <!-- <v-footer :fixed="fixed" app>
       <span>&copy;Rainbow Hub 2018</span>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 <style scoped>
@@ -119,19 +129,33 @@
 import Courses from "./components/courses";
 import MailBox from "./components/messages";
 import CreateCourse from "./components/new-course";
+import Loader from "./components/parts/loader";
+import Course from "./components/course";
+import CreateCurriculum from "./components/curriculum";
+import Profile from "./components/_settings/Account.vue";
 export default {
   name: "App",
   components: {
     Courses,
     MailBox,
     CreateCourse,
+    Loader,
+    Course,
+    CreateCurriculum,
+    Profile
   },
   methods: {
+    printUpdate(){
+      this.scoochOver(1.2,"Microsoft");
+    },
     scoochOver(id, title) {
-      console.log(id, title);
-      console.log(status);
-      this.status.active = id;
+      this.status.active = 0;
       this.status.title = title;
+      var status = this.status;
+      setTimeout(function () {
+        status.active = id;  
+      },3000);
+      
     }
   },
   data() {

@@ -26,7 +26,7 @@
   
     <template slot="items" slot-scope="props">
         
-     <a color="grey" style="color:grey;padding:none;"> <td>{{ props.item.name }}</td></a>
+     <a @click="courseDetails();" color="grey" style="color:grey;padding:none;"> <td>{{ props.item.name }}</td></a>
       <td class="text-xs-right">{{ props.item.students }}</td>
       <td class="text-xs-right">{{ props.item.date }}</td>
       <td class="text-xs-right">{{ props.item.rating }}</td>
@@ -44,11 +44,19 @@
 <script>
 export default {
   name: "Home",
+  methods:{
+    courseDetails(){
+      //this.active = parseFloat("1.2");
+      this.$emit('update', '1.2');
+     // this.$root.status.active =  1.2;
+    }
+  },
   props: {
     user: String,
     _id: String,
     pass: String,
-    date: String
+    date: String,
+    active:Number,
   },
   data() {
     return {
