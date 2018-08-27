@@ -170,10 +170,10 @@
 			<v-toolbar-title>Overview</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-menu bottom left max-width="145" min-width="145">
-				<v-btn small round color="accent" dark slot="activator">
+				<v-chip round color="accent" dark slot="activator">
 					<span class="caption">Training one</span> 
-					<v-icon size="18">mdi-menu-down</v-icon>
-				</v-btn>
+					<v-icon size="18" right>mdi-menu-down</v-icon>
+				</v-chip>
 				<v-list subheader dense >
 					<v-list-tile to="/" avatar>
 						<v-list-tile-title>See all courses</v-list-tile-title>
@@ -195,9 +195,13 @@
 				<v-icon>mdi-bell</v-icon>
 			</v-btn>
 			<v-menu offset-y right nudge-bottom="10" nudge-right="20" min-width="320">
-				<v-btn icon slot="activator">
-					<v-icon color="">mdi-account-circle</v-icon>
-				</v-btn>
+				<v-avatar
+					size="30"
+					slot="activator"
+				>
+					<img v-if="user && user.avatar" :src="user.avatar" alt="">
+					<v-icon v-else>mdi-account-circle</v-icon>
+				</v-avatar>
 				<v-card>
 					<v-layout>
 						<v-flex xs5 class="pa-3">

@@ -33,7 +33,13 @@ router.beforeEach((to, from, next) => {
 			// TODO: do some validation of user's credentials
 			
 			// TODO: attach users reusable data to routes and make them usable
-			user = {};
+			user = {
+				avatar: '/static/img/user.jpg',
+				phone: '+234 703 941 3016',
+				email: 'john@doe.com',
+				address: '17, Omotayo odofin street, alasia ijanikin lagos',
+				gender: 'male'
+			};
 			return true;
 		}
 	}

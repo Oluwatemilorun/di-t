@@ -3,42 +3,47 @@
 		<v-toolbar dark color="transparent" flat app absolute dense>
 			<img :src="logo.normal" alt="" width="40px">
 			<v-toolbar-title>
-				<span>Digiskills</span>
+				<span class="black--text">Digiskills</span>
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-btn icon>
 				<v-icon>mdi-bell</v-icon>
 			</v-btn>
 
-			<v-menu offset-y min-width="320">
-				<v-btn icon slot="activator">
-					<v-icon color="">mdi-account-circle</v-icon>
-				</v-btn>
+			<v-menu offset-y right nudge-bottom="10" nudge-right="20" min-width="320">
+				<v-avatar
+					size="30"
+					slot="activator"
+				>
+					<img v-if="user && user.avatar" :src="user.avatar" alt="">
+					<v-icon v-else>mdi-account-circle</v-icon>
+				</v-avatar>
 				<v-card>
 					<v-layout>
-						<v-flex xs5 class="pa-2">
+						<v-flex xs5 class="pa-3">
 							<v-avatar
-								size="100"
+								size="80"
 								color="accent"
 								class="mx-auto"
 							>
-								<img src="src" alt="">
+								<img v-if="user && user.avatar" :src="user.avatar" alt="">
+								<v-icon v-else size="50" color="white">mdi-account-circle</v-icon>
 							</v-avatar>
 						</v-flex>
 						<v-flex xs7>
 							<v-card-title primary-title class="px-0">
 								<div>
-									<div class="title">John Doe</div>
-									<div>john@doe.com</div>
-									<div>(2014)</div>
+									<div class="body-1 font-weight-bold">John Doe</div>
+									<div class="tagline">john@doe.com</div>
 								</div>
 							</v-card-title>
 						</v-flex>
 					</v-layout>
 					<v-divider light></v-divider>
 					<v-card-actions class="pa-2 grey lighten-5">
+						<v-btn small flat color="accent" to="/profile">My profile</v-btn>
 						<v-spacer></v-spacer>
-						<v-btn flat color="accent">log out</v-btn>
+						<v-btn small flat color="accent">log out</v-btn>
 					</v-card-actions>
 				</v-card>
 			</v-menu>
