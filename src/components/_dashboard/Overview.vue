@@ -1,111 +1,91 @@
 <template>
-    <v-fade-transition>
-        <v-container grid-list-lg>
-            <v-layout row wrap>
-                <v-flex xs6 md4 lg3>
-                    <v-card ripple hover :to="`users`" color="white">
-                        <v-container>
-                            <div class="bold black--text">No of Users</div>
-                            <div class="display-2 bold black--text">{{data.no_users}}</div>
-                        </v-container>
-                    </v-card>
-                </v-flex>
-                <v-flex xs6 md4 lg3>
-                    <v-card ripple hover :to="`categories`" color="white">
-                        <v-container>
-                            <div class="bold black--text">No of Categories</div>
-                            <div class="display-2 bold black--text">{{data.no_categories}}</div>
-                        </v-container>
-                    </v-card>
-                </v-flex>
-                <v-flex xs6 md4 lg3>
-                    <v-card ripple hover :to="`questions`" color="white">
-                        <v-container>
-                            <div class="bold black--text">No of Questions</div>
-                            <div class="display-2 bold black--text">{{data.no_questions}}</div>
-                        </v-container>
-                    </v-card>
-                </v-flex>
-                <v-flex xs6 md4 lg3>
-                    <v-card ripple hover :to="`games`" color="white">
-                        <v-container>
-                            <div class="bold black--text">No of Games</div>
-                            <div class="display-2 bold black--text">{{data.no_games}}</div>
-                        </v-container>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-fade-transition>
+  <v-container fluid>
+    <v-slide-y-transition mode="out-in">
+		<v-container grid-list-xl>
+			<v-layout row wrap>
+				<!-- items -->
+				<!-- <v-subheader>Course overview</v-subheader> -->
+				<v-flex v-for="(item, index) in overviewItems" :key="index" xs12 sm6 md4>
+					<v-card raised hover height="200px" class="pa-3" style="border-radius: 10px; position: relative" :to="item.path">
+						<v-card-text>
+							<h3 class="title capitalize">{{item.name}}</h3>
+							<p>{{item.value}}</p>
+						</v-card-text>
+						<v-card-media
+							contain
+							height="200px"
+							:src="logo.normal"
+							style="opacity: 0.5; position: absolute; right: 0; bottom: 0; width: 70%"
+							class="d-block"
+						>
+						</v-card-media>
+					</v-card>
+				</v-flex>
+
+				<!-- messages and event -->
+				<v-flex xs12 sm6>
+					<v-card aised hover height="100px" class="pa-3" style="border-radius: 10px; position: relative" to="calendar">
+						<v-card-text>
+							<h3 class="title capitalize">12 New</h3>
+							<p>Messages</p>
+						</v-card-text>
+						<v-icon
+							size="70"
+							color="secondary"
+							style="opacity: 0.5; position: absolute; right: 0; bottom: 0;"
+							class="d-block"
+						>
+							mdi-inbox
+						</v-icon>
+					</v-card>
+				</v-flex>
+				<v-flex xs12 sm6>
+					<v-card aised hover height="100px" class="pa-3" style="border-radius: 10px; position: relative" to="calendar">
+						<v-card-text>
+							<h3 class="title capitalize">3 Agendas</h3>
+							<p>Calendar</p>
+						</v-card-text>
+						<v-icon
+							size="70"
+							color="secondary"
+							style="opacity: 0.5; position: absolute; right: 0; bottom: 0;"
+							class="d-block"
+						>
+							mdi-calendar
+						</v-icon>
+					</v-card>
+				</v-flex>
+			</v-layout>
+		</v-container>
+    </v-slide-y-transition>
+  </v-container>
 </template>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-    
-</style>
 
 <script>
-import axios from 'axios';
-    export default {
-        props: ['showSnackbar', 'showLoader'],
-        data() {
-            return {
-				openOnHover: true,
-				data: {
-					no_users: 0,
-					no_categories: 0,
-					no_questions: 0,
-					no_games: 0,
-				}
-            }
-		},
-		beforeRouteEnter (to, from, next) {
-			axios.get('/admin/summarize')
-			.then((res) => {
-				if (res.data.state == 'OK') {
-					next(vm => {
-						vm.data = res.data.payload
-						vm.showLoader(false)
-					});
-				}
-				else {
-					next(vm => {
-						if (res.data.state == 'NO') vm.showSnackbar(res.data.payload, 'red accent-1');
-						else vm.showSnackbar('An error occured. Try again later', 'red accent-1');
-						vm.showLoader(false)
-					})
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-				next(vm => {
-					vm.showSnackbar('An error occured', 'red accent-1');
-					vm.showLoader(false);
-				});
-			});
-		},
-		beforeRouteUpdate (to, from, next) {
-			axios.get('/admin/summarize')
-				.then((res) => {
-					if (res.data.state == 'OK') {
-						this.data = res.data.payload
-						this.showLoader(false)
-					}
-					else {
-						if (res.data.state == 'NO') this.showSnackbar(res.data.payload, 'red accent-1');
-						else this.showSnackbar('An error occured. Try again later', 'red accent-1');
-						this.showLoader(false)
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-					this.showSnackbar('An error occured', 'red accent-1');
-					this.showLoader(false);
-				});
-			next();
-		},
-        mounted() {
-            // this.$route.params.title = 'Dashboard'
-        }
-    }
+
+import bg from '@/assets/pg-bg.png'
+import logo from '@/assets/logo.png'
+import logoInverted from '@/assets/logo-inverted.png'
+
+export default {
+	data () {
+		return {
+			bg: bg,
+			logo: {
+				normal: logo,
+				inverted: logoInverted
+			},
+			overviewItems: [
+				{ name: 'student', value: 10, path: 'videos' },
+				{ name: 'certificates', value: 10, path: 'videos' },
+				{ name: 'videos', value: 10, path: 'videos' },
+				{ name: 'slides', value: 10, path: 'videos' },
+				{ name: 'notes', value: 10, path: 'videos' },
+				{ name: 'classes', value: 10, path: 'videos' },
+			]
+		}
+	}
+}
+
 </script>

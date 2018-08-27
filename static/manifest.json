@@ -1,6 +1,6 @@
 {
-  "name": "tq-app",
-  "short_name": "tq-app",
+  "name": "digiskills",
+  "short_name": "digiskills",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",
