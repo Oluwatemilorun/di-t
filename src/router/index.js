@@ -11,6 +11,8 @@ import Overview from "@/components/_dashboard/Overview";
 import Student from "@/components/_dashboard/Student";
 import Certificates from "@/components/_dashboard/Certificates";
 import Videos from "@/components/_dashboard/Videos";
+import Calendar from "@/components/_dashboard/Calendar";
+import Messages from "@/components/_dashboard/Messages";
 
 Vue.use(Router);
 
@@ -33,7 +35,7 @@ export default new Router({
 			meta: { requiresAuth: true }
 		},
 		{
-			path: "/course/:id",
+			path: "/course/:courseId",
 			component: Dashboard,
 			meta: { requiresAuth: true },
 			children: [
@@ -54,13 +56,28 @@ export default new Router({
 				{
 					path: "certificates",
 					name: "certificates",
-					component: Student
+					component: Certificates
 				},
 				{
 					path: "videos",
 					name: "videos",
 					component: Videos
-				}
+				},
+				{
+					path: "calendar",
+					name: 'calendar',
+					component: Calendar
+				},
+				{
+					path: "messages",
+					component: Messages,
+					children: [
+						{ path: '', redirect: { path: 'inbox' } },
+						{ path: 'inbox', name: 'inbox' },
+						{ path: 'sent', name: 'sent' },
+						{ path: 'drafts', name: 'drafts' },
+					]
+				},
 			]
 		}
 	],

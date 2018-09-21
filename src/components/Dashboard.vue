@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="dummy-bg--wrapper" :style="{ 'background-image': `url(${bgToolbar}`}"></div>
+		<!-- <div class="dummy-bg--wrapper" :style="{ 'background-image': `url(${bgToolbar}`}"></div> -->
 		<v-navigation-drawer
 			persistent
 			:mini-variant="miniVariant"
@@ -21,7 +21,7 @@
 			</v-toolbar>
 			<v-divider></v-divider>
 			<v-list>
-				<v-list-tile to="overview">
+				<v-list-tile :to="defaultPath + 'overview'">
 					<v-list-tile-action>
 						<v-icon color="accent">mdi-home</v-icon>
 					</v-list-tile-action>
@@ -47,7 +47,7 @@
 
 			<v-list subheader dense class="teal darken-4">
 				<v-subheader>Manage</v-subheader>
-				<v-list-tile to="students">
+				<v-list-tile :to="defaultPath + 'students'">
 					<v-list-tile-action>
 						<v-icon>mdi-account-multiple</v-icon>
 					</v-list-tile-action>
@@ -55,7 +55,7 @@
 						<v-list-tile-title>Students</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				<v-list-tile to="certificates">
+				<v-list-tile :to="defaultPath + 'certificates'">
 					<v-list-tile-action>
 						<v-icon>mdi-certificate</v-icon>
 					</v-list-tile-action>
@@ -63,7 +63,7 @@
 						<v-list-tile-title>Certificates</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				<v-list-tile to="videos">
+				<v-list-tile :to="defaultPath + 'videos'">
 					<v-list-tile-action>
 						<v-icon>mdi-play</v-icon>
 					</v-list-tile-action>
@@ -71,7 +71,7 @@
 						<v-list-tile-title>Videos</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				<v-list-tile to="slides">
+				<v-list-tile :to="defaultPath + 'slides'">
 					<v-list-tile-action>
 						<v-icon>mdi-file-presentation-box</v-icon>
 					</v-list-tile-action>
@@ -79,7 +79,7 @@
 						<v-list-tile-title>Slides</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				<v-list-tile to="notes">
+				<v-list-tile :to="defaultPath + 'notes'">
 					<v-list-tile-action>
 						<v-icon>mdi-note-text</v-icon>
 					</v-list-tile-action>
@@ -110,27 +110,51 @@
 					</v-list-tile>
 				</v-list-group>
 
-				<v-list-group prepend-icon="mdi-message-text" no-action>
+				<v-list-group prepend-icon="mdi-message-text" :no-action="!miniVariant">
 					<v-list-tile slot="activator">
 						<v-list-tile-content>
 							<v-list-tile-title>Messages</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
 
-					<v-list-tile>
+					<v-list-tile to="?compose=new">
+						<v-list-tile-action v-if="miniVariant">
+							<v-icon>mdi-pen</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Compose</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile :to="defaultPath + 'messages/inbox'">
+						<v-list-tile-action v-if="miniVariant">
+							<v-badge
+								v-model="miniVariant"
+								color="accent"
+								overlap
+							>
+									<v-icon>mdi-inbox</v-icon>
+								<span slot="badge">{{newMessages}}</span>
+							</v-badge>
+						</v-list-tile-action>
 						<v-list-tile-content>
 							<v-list-tile-title>Inbox</v-list-tile-title>
 						</v-list-tile-content>
-						<v-list-tile-action>
-							<v-chip small color="accent" label>10+ new</v-chip>
+						<v-list-tile-action v-if="!miniVariant">
+							<v-chip small color="accent" label>{{newMessages}} new</v-chip>
 						</v-list-tile-action>
 					</v-list-tile>
-					<v-list-tile>
+					<v-list-tile :to="defaultPath + 'messages/sent'">
+						<v-list-tile-action v-if="miniVariant">
+							<v-icon>mdi-send</v-icon>
+						</v-list-tile-action>
 						<v-list-tile-content>
 							<v-list-tile-title>Sent</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
-					<v-list-tile>
+					<v-list-tile :to="defaultPath + 'messages/drafts'">
+						<v-list-tile-action v-if="miniVariant">
+							<v-icon>mdi-note</v-icon>
+						</v-list-tile-action>
 						<v-list-tile-content>
 							<v-list-tile-title>Drafts</v-list-tile-title>
 						</v-list-tile-content>
@@ -138,7 +162,7 @@
 
 				</v-list-group>
 
-				<v-list-tile>
+				<v-list-tile :to="defaultPath + 'calendar'">
 					<v-list-tile-action>
 						<v-icon>mdi-calendar</v-icon>
 					</v-list-tile-action>
@@ -148,7 +172,7 @@
 				</v-list-tile>
 			</v-list>
 
-			<v-footer color="teal darken-3" fixed height="50px">
+			<v-footer color="transparent" fixed height="50px">
 				<v-layout row wrap>
 					<v-spacer v-if="!miniVariant"></v-spacer>
 					<v-btn icon @click.stop="miniVariant = !miniVariant">
@@ -167,10 +191,8 @@
 			:class="[{'elevation-3': scrolled}]"
 		>
 			<v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-toolbar-side-icon>
-			<v-toolbar-title>Overview</v-toolbar-title>
-			<v-spacer></v-spacer>
 			<v-menu bottom left max-width="145" min-width="145">
-				<v-chip round color="accent" dark slot="activator">
+				<v-chip round color="transparent" text-color="accent" label class="ma-0 pa-0" dark slot="activator">
 					<span class="caption">Training one</span> 
 					<v-icon size="18" right>mdi-menu-down</v-icon>
 				</v-chip>
@@ -186,11 +208,19 @@
 					</v-list-tile>
 					<v-divider></v-divider>
 					<v-subheader class="caption">Recent</v-subheader>
-					<v-list-tile v-for="item in items" :key="item.key" @click="">
+					<!-- TODO: create endpoint to get courses -->
+					<v-list-tile v-for="item in courses" :key="item.key" @click="">
 						<v-list-tile-title>{{ item.title }}</v-list-tile-title>
 					</v-list-tile>
 				</v-list>
 			</v-menu>
+
+			<v-slide-y-reverse-transition>
+				<v-toolbar-title v-if="scrolled">
+						<span class="subheading capitalize">{{title}}</span>
+				</v-toolbar-title>
+			</v-slide-y-reverse-transition>
+			<v-spacer></v-spacer>
 			<v-btn icon>
 				<v-icon>mdi-bell</v-icon>
 			</v-btn>
@@ -237,11 +267,15 @@
 			<router-view/>
 		</v-content>
 
+		<!-- TODO: create endpoint ot load students and pass to message composer -->
+		<Composer :init="composeMessage" :close="() => composeMessage = false" :students="students" />
+
 		<!-- <v-footer inset :fixed="fixed" app>
 			<span>&copy; 2017</span>
 		</v-footer> -->
 	</div>
 </template>
+
 
 <style>
 .dummy-bg--wrapper {
@@ -263,10 +297,21 @@ import bgToolbar from '@/assets/bg-toolbar.png'
 import logo from '@/assets/logo.png'
 import logoInverted from '@/assets/logo-inverted.png'
 
+import Composer from '@/components/_messages/Composer'
+
 export default {
+	components: { Composer },
 	props: ['addCourse'],
 	data () {
 		return {
+			user: {},
+			defaultPath: null,
+			newMessages: 10,
+			composeMessage: false,
+			// -->
+			courses: ['trna-001', 'tidc-222'],
+			students: ['Isaac', 'Luqman'],
+			// 
 			bg: bg,
 			bgToolbar: bgToolbar,
 			logo: {
@@ -276,15 +321,10 @@ export default {
 			clipped: false,
 			drawer: true,
 			fixed: false,
-			items: [{
-				icon: 'bubble_chart',
-				title: 'Inspire'
-			}],
 			miniVariant: false,
 			scrolled: false,
 			right: true,
-			rightDrawer: false,
-			title: 'Vuetify.js'
+			title: 'Overview',
 		}
 	},
 	methods: {
@@ -293,6 +333,23 @@ export default {
 			if (scrollY >= 32) this.scrolled = true;
 			else this.scrolled = false;
 		}
-	}
+	},
+	beforeRouteUpdate (to, from, next) {
+		this.title = to.name;
+		if (to.query.compose == 'new') {
+			this.composeMessage = true;
+		}
+		next();
+	},
+	beforeRouteEnter (to, from, next) {
+		next(vm => {
+			vm.title = to.name;
+			vm.user = to.params.user;
+			vm.defaultPath = `/course/${to.params.courseId}/`;
+			if (to.query.compose == 'new') {
+				vm.composeMessage = true;
+			}
+		});
+	},
 }
 </script>

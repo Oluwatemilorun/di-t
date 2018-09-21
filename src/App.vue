@@ -33,5 +33,8 @@ export default {
 .capitalize {
 	text-transform: capitalize !important;
 }
+.secondary-toolbar {
+	z-index: 0;
+}
 </style>
 
