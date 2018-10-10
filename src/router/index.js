@@ -4,6 +4,7 @@ import Router from "vue-router";
 import Index from "@/components/Index";
 import Dashboard from "@/components/Dashboard";
 import Profile from "@/components/Profile";
+import EditProfile from "@/components/EditProfile";
 
 
 // dashboard
@@ -29,10 +30,21 @@ export default new Router({
 			redirect: { path: "/" }
 		},
 		{
-			path: "/profile",
+			path: "/u/:userId",
 			name: "profile",
 			component: Profile,
-			meta: { requiresAuth: true }
+			meta: { requiresAuth: true },
+		},
+		{
+			path: "/u/:userId/edit",
+			name: "edit-profile",
+			component: EditProfile,
+			meta: { requiresAuth: true },
+			children: [
+				{
+					path: ''
+				}
+			]
 		},
 		{
 			path: "/course/:courseId",

@@ -23,7 +23,7 @@
 					</v-list-tile>
 					<v-divider></v-divider>
 					<v-subheader class="caption">Recent</v-subheader>
-					<v-list-tile v-for="item in items" :key="item.key" @click="">
+					<v-list-tile v-for="item in courses" :key="item.key" @click="">
 						<v-list-tile-title>{{ item.title }}</v-list-tile-title>
 					</v-list-tile>
 				</v-list>
@@ -85,9 +85,47 @@
 							>
 								<img src="/static/img/user.jpg" alt="alt">
 							</v-avatar>
-							<div class="section-divider column align-content-center my-3">
+							<div class="section-divider column align-content-center mt-3">
 								<v-divider light></v-divider>
-								<span class="white pr-3 caption grey--text">WORK</span>
+								<span class="white pr-3 caption grey--text">Bio</span>
+							</div>
+							<div class="section-text">
+								{{user.bio || 'No bio'}}
+							</div>
+							<div class="section-divider column align-content-center mt-3">
+								<v-divider light></v-divider>
+								<span class="white pr-3 caption grey--text">Certificates</span>
+							</div>
+							<div class="section-text">
+								<v-layout align-center row wrap>
+									<v-chip v-if="user && user.certificates" v-for="(item, index) in user.certificates" :key="index" color="secondary" small class="capitalize">{{item}}</v-chip>
+									<v-tooltip bottom>
+										<!-- TODO: check if profile is viewed by owner user.id == profile.id ish -->
+										<!-- TODO: this add button will only show if condition is ture -->
+										<v-btn slot="activator" icon flat color="secondary" small><v-icon>mdi-plus</v-icon></v-btn>
+										<span>Add certificates</span>
+									</v-tooltip>
+								</v-layout>
+							</div>
+							<div class="section-divider column align-content-center mt-3">
+								<v-divider light></v-divider>
+								<span class="white pr-3 caption grey--text">Skills & Endorsements</span>
+							</div>
+							<div class="section-text">
+								<v-list two-line dense class="pa-0 ma-0">
+									<v-list-tile v-for="(item, index) in 3" :key="index" class="pa-0">
+										<v-list-tile-content>
+											<v-list-tile-title>
+												<span>Research</span>
+												<v-chip small color="secondary" label>10</v-chip>
+											</v-list-tile-title>
+											<v-list-tile-sub-title>
+												Users who endorsed this skill
+											</v-list-tile-sub-title>
+										</v-list-tile-content>
+									</v-list-tile>
+								</v-list>
+								<v-btn flat block color="secondary" dark>show more</v-btn>
 							</div>
 						</v-layout>
 					</v-flex>
@@ -107,9 +145,15 @@
 								</h1>
 							</div>
 							<div class="sect mb-3">
-								<v-btn flat color="grey darken-1" class="ma-0" icon><v-icon>mdi-account-edit</v-icon></v-btn>
+								<v-tooltip bottom>
+									<v-btn slot="activator" flat color="grey darken-1" class="ma-0" icon :to="`/u/${user.id}/edit`"><v-icon>mdi-account-edit</v-icon></v-btn>
+									<span>Edit Profile</span>
+								</v-tooltip>
 								<!-- <v-btn flat color="grey darken-1" class="ma-0" icon><v-icon>mdi-message-text</v-icon></v-btn> -->
-								<v-btn flat color="grey darken-1" class="ma-0" icon><v-icon>mdi-dots-horizontal</v-icon></v-btn>
+								<v-tooltip bottom>
+									<v-btn slot="activator" flat color="grey darken-1" class="ma-0" icon><v-icon>mdi-dots-horizontal</v-icon></v-btn>
+									<span>more</span>
+								</v-tooltip>
 							</div>
 							<div class="sect mb-3">
 								<v-tabs
@@ -119,8 +163,8 @@
 										<v-tab href="#tab-about">
 											About
 										</v-tab>
-										<v-tab href="#tab-activities">
-											Activities
+										<v-tab href="#tab-experience">
+											Experience
 										</v-tab>
 										<v-tab href="#tab-reviews">
 											reviews
@@ -142,7 +186,7 @@
 													<div class="body-1 font-weight-bold">Phone</div>
 												</v-flex>
 												<v-flex xs8>
-													<div class="secondary--text">{{user.phone}}</div>
+													<div class="secondary--text">{{user.phone || '- -'}}</div>
 												</v-flex>
 											</v-layout>
 											<v-layout align-center row class="my-2">
@@ -150,7 +194,15 @@
 													<div class="body-1 font-weight-bold">E-mail</div>
 												</v-flex>
 												<v-flex xs8>
-													<div class="secondary--text">{{user.email}}</div>
+													<div class="secondary--text">{{user.email || '- -'}}</div>
+												</v-flex>
+											</v-layout>
+											<v-layout align-center row class="my-2">
+												<v-flex xs3 sm2 md1>
+													<div class="body-1 font-weight-bold">Websites</div>
+												</v-flex>
+												<v-flex xs8>
+													<div class="secondary--text">{{user.websites || '- - '}}</div>
 												</v-flex>
 											</v-layout>
 											<v-layout align-center row class="my-2">
@@ -158,7 +210,7 @@
 													<div class="body-1 font-weight-bold">Address</div>
 												</v-flex>
 												<v-flex xs8>
-													<div class="secondary--text">{{user.address}}</div>
+													<div class="secondary--text">{{user.address || '- -'}}</div>
 												</v-flex>
 											</v-layout>
 
@@ -168,18 +220,59 @@
 													<div class="body-1 font-weight-bold">Gender</div>
 												</v-flex>
 												<v-flex xs8>
-													<div class="secondary--text">{{user.gender}}</div>
+													<div class="secondary--text">{{user.gender || '- -'}}</div>
 												</v-flex>
 											</v-layout>
 										</v-card>
 									</v-tab-item>
 									
-									<v-tab-item id="tab-activities">
+									<v-tab-item id="tab-experience">
+										<v-card flat>
+											<v-list three-line>
+												<!-- TODO: create endpoint to get todo -->
+												<template v-for="(item, index) in experience">
+													<v-list-tile avatar :key="index">
+														<v-list-tile-avatar tile color="grey lighten-3">
+															<img v-if="item.avatar" :src="item.avatar">
+															<v-icon v-else>mdi-office-building</v-icon>
+														</v-list-tile-avatar>
+														<v-list-tile-content class="pl-3">
+															<v-list-tile-title class="title capitalize">experience</v-list-tile-title>
+															<v-list-tile-sub-title class="font-weight-bold capitalize">company</v-list-tile-sub-title>
+															<v-list-tile-sub-title class="caption capitalize">Start year <span class="font-weight-bold black--text">-</span> End year</v-list-tile-sub-title>
+														</v-list-tile-content>
+														<v-list-tile-action>
+															<v-btn flat icon><v-icon>mdi-pencil</v-icon></v-btn>
+														</v-list-tile-action>
+													</v-list-tile>
 
+													<v-divider v-if="index + 1 < experience.length" inset :key="index"></v-divider>
+												</template>
+											</v-list>
+										</v-card>
 									</v-tab-item>
 
 									<v-tab-item id="tab-reviews">
-
+										<v-card flat>
+											<v-list three-line>
+												<template v-for="(review, index) in reviews">
+													<v-list-tile :key="index" avatar>
+														<v-list-tile-avatar color="grey lighten-3">
+															<img v-if="review.avatar" :src="review.avatar">
+															<v-icon v-else>mdi-account</v-icon>
+														</v-list-tile-avatar>
+														<v-list-tile-content>
+															<v-list-tile-title>{{review.name}}</v-list-tile-title>
+															<div>
+																<!-- TODO: you should send the star rating in number form -->
+																<v-icon v-for="i in review.star" :key="i" size="15px">mdi-star</v-icon>
+															</div>
+															<v-list-tile-sub-title>{{review.review}}</v-list-tile-sub-title>
+														</v-list-tile-content>
+													</v-list-tile>
+												</template>
+											</v-list>
+										</v-card>
 									</v-tab-item>
 
 									<v-tab-item id="tab-settings">
@@ -218,7 +311,14 @@ export default {
 			],
 			tabs: null,
 			canEdit: false,
-			phone: null
+			phone: null,
+			courses: [],
+			experience: [{}, {}],
+			reviews: [
+				{ name: 'Some user', star: 4, review: 'some review about this trainer / student -- profile owner' },
+				{ name: 'Some user', star: 3, review: 'some review about this trainer / student -- profile owner' },
+				{ name: 'Some user', star: 5, review: 'some review about this trainer / student -- profile owner' },
+			]
 		}
 	},
 	methods: {
@@ -231,7 +331,7 @@ export default {
 		next(vm => {
 			vm.user = to.params.user;
 			vm.loadAbout();
-		})
+		});
 	}
 
 }
@@ -242,7 +342,7 @@ export default {
 	height: auto !important;
 }
 .section-divider {
-	height: 48px;
+	height: 40px;
 	display: flex;
 	align-items: center;
     flex-direction: row-reverse;
@@ -256,5 +356,8 @@ export default {
     background-repeat: no-repeat;
     background-size: contain;
     opacity: 0.3;
+}
+.section-text .v-list__tile {
+	padding: 0;
 }
 </style>

@@ -255,7 +255,7 @@
 					</v-layout>
 					<v-divider light></v-divider>
 					<v-card-actions class="pa-2 grey lighten-5">
-						<v-btn small flat color="accent" to="/profile">My profile</v-btn>
+						<v-btn small flat color="accent" :to="`/u/${user.id}`">My profile</v-btn>
 						<v-spacer></v-spacer>
 						<v-btn small flat color="accent">log out</v-btn>
 					</v-card-actions>
@@ -336,6 +336,7 @@ export default {
 	},
 	beforeRouteUpdate (to, from, next) {
 		this.title = to.name;
+		this.user = to.params.user;
 		if (to.query.compose == 'new') {
 			this.composeMessage = true;
 		}

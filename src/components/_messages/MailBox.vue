@@ -2,28 +2,54 @@
 	<v-layout row wrap class="my-4 grey lighten-4">
 		<v-flex xs4>
 			<v-card height="93vh" class="box-items--wrapper">
+				<v-slide-y-transition>
+					<v-toolbar v-if="selected.length >= 1" dense  card class="pa-0 box-items--toolbar">
+						<div>
+							<v-checkbox
+								primary
+								@change="selectAll"
+								hide-details
+								:indeterminate="selected.length >= 1&& selected.length < items.length"
+								:value="true ? selected.length == items.length : false"
+							></v-checkbox>
+						</div>
+						<v-spacer></v-spacer>
+						<v-btn flat small color="black" round @click="deleteSelected">delete</v-btn>
+					</v-toolbar>
+
+				</v-slide-y-transition>
+
 				<v-list two-line dense>
 					<template v-for="(item, index) in items">
 						<v-list-tile
 							:key="item.title"
-							avatar
+							avatar 
 							ripple
 							@click=""
 						>
 
-						<v-list-tile-content>
-							<v-list-tile-title class="font-weight-bold body-1 pa-0">{{ item.user }}</v-list-tile-title>
-							<v-list-tile-sub-title class="text--primary">{{ item.subject }}</v-list-tile-sub-title>
-							<v-list-tile-sub-title class="caption">{{ item.text }}</v-list-tile-sub-title>
-						</v-list-tile-content>
+							<v-list-tile-action>
+								<v-checkbox
+									v-model="selected"
+									primary
+									hide-details
+									:value="item.id"
+								></v-checkbox>
+							</v-list-tile-action>
 
-						<v-list-tile-action>
-							<v-list-tile-action-text>{{ item.date }}</v-list-tile-action-text>
-						</v-list-tile-action>
+							<v-list-tile-content>
+								<v-list-tile-title class="font-weight-bold body-1 pa-0">{{ item.user }}</v-list-tile-title>
+								<v-list-tile-sub-title class="text--primary">{{ item.subject }}</v-list-tile-sub-title>
+								<v-list-tile-sub-title class="caption">{{ item.text }}</v-list-tile-sub-title>
+							</v-list-tile-content>
+
+							<v-list-tile-action>
+								<v-list-tile-action-text>{{ item.date }}</v-list-tile-action-text>
+							</v-list-tile-action>
 
 						</v-list-tile>
 						<v-divider
-							v-if="index + 1 < items.length"
+							v-if="index + 1 <  items.length"
 							:key="index"
 						></v-divider>
 					</template>
@@ -116,13 +142,38 @@ export default {
 	props: ['items'],
 	data () {
 		return {
-			message: { user: 'Rainbow Hub', subject: 'Your Mailbox', text: 'Your mailbox is ready', date: 'yesterday', star: false }
+			message: { user: 'Rainbow Hub', subject: 'Your Mailbox', text: 'Your mailbox is ready', date: 'yesterday', star: false },
+			selected: [],
 		}
+	},
+	computed: {
 	},
 	methods: {
 		starMessage () {
 			// () => 
 			this.message.star = !this.message.star;
+		},
+		selectAll (v) {
+			switch (v) {
+				case true:
+					this.items.forEach((se => {
+						this.selected.push(se.id);
+					}).bind(this));
+					break;
+				case false:
+					this.selected = [];
+					break;
+				case null:
+					this.selected = [];
+					break;
+				default:
+					break;
+			}
+		},
+		deleteSelected () {
+			// TODO: add endpoint to delete messages with ids in [this.selected]
+			// TODO: remove items in [this.selected] from [this.items] or just reload the entire route
+			// TODO: empty [this.selected]
 		}
 	}
 }
@@ -131,5 +182,8 @@ export default {
 <style>
 .box-items--wrapper {
 	overflow-y: scroll
+}
+.box-items--toolbar .v-toolbar__content {
+	padding: 0 16px;
 }
 </style>

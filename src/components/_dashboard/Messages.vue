@@ -22,8 +22,8 @@ export default {
 	data () {
 		return {
 			items: [
-				{ user: 'Rainbow Hub', subject: 'Your Mailbox', text: 'Your mailbox is ready', date: 'yesterday' },
-				{ user: 'Rainbow Hub', subject: 'Your Mailbox', text: 'Your mailbox is ready' },
+				{ id: 'jevbdvewieciec', user: 'Rainbow Hub', subject: 'Your Mailbox', text: 'Your mailbox is ready', date: 'yesterday' },
+				{ id: 'jevbdvewcecwe', user: 'Rainbow Hub', subject: 'Your Mailbox', text: 'Your mailbox is ready' },
 			],
 			title: null
 		}

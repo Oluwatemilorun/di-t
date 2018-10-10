@@ -34,11 +34,13 @@ router.beforeEach((to, from, next) => {
 			
 			// TODO: attach users reusable data to routes and make them usable
 			user = {
+				id: 'v23esw3gv3efve2a',
 				avatar: '/static/img/user.jpg',
 				phone: '+234 703 941 3016',
 				email: 'john@doe.com',
 				address: '17, Omotayo odofin street, alasia ijanikin lagos',
-				gender: 'male'
+				gender: 'male',
+				certificates: ['B Sc', 'B Tech', 'Whatever will be here']
 			};
 			return true;
 		}
