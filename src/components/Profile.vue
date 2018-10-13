@@ -286,7 +286,17 @@
 				</v-layout>	
 			</v-container>
 		</section>
-
+		<v-footer height="200" color="transparent">
+			<v-layout justify-center align-center row wrap>
+				<v-btn flat round color="secondary" dark>Terms</v-btn>
+				<v-btn flat round color="secondary" dark>Privacy policy</v-btn>
+				<v-btn flat round color="secondary" dark>Contact</v-btn>
+			
+				<v-flex xs12 text-xs-center py-3>
+					&copy;2018 — <strong>Rainbow Hub</strong>
+				</v-flex>
+			</v-layout>
+		</v-footer>
 	</v-container>
 </template>
 
@@ -323,7 +333,6 @@ export default {
 	},
 	methods: {
 		loadAbout () {
-			console.log(this.user)
 			this.phone = this.user.phone
 		}
 	},

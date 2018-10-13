@@ -4,7 +4,7 @@ import Router from "vue-router";
 import Index from "@/components/Index";
 import Dashboard from "@/components/Dashboard";
 import Profile from "@/components/Profile";
-import EditProfile from "@/components/EditProfile";
+import PersonalSettings from "@/components/EditProfile";
 
 
 // dashboard
@@ -14,6 +14,10 @@ import Certificates from "@/components/_dashboard/Certificates";
 import Videos from "@/components/_dashboard/Videos";
 import Calendar from "@/components/_dashboard/Calendar";
 import Messages from "@/components/_dashboard/Messages";
+
+import EditAccount from '@/components/_edit_profile/Account';
+import EditProfile from '@/components/_edit_profile/Profile';
+import EditNotifications from '@/components/_edit_profile/Notifications';
 
 Vue.use(Router);
 
@@ -37,12 +41,27 @@ export default new Router({
 		},
 		{
 			path: "/u/:userId/edit",
-			name: "edit-profile",
-			component: EditProfile,
+			component: PersonalSettings,
 			meta: { requiresAuth: true },
 			children: [
 				{
-					path: ''
+					path: '',
+					redirect: { path: 'account' }
+				},
+				{
+					path: 'account',
+					name: 'edit-account',
+					component: EditAccount
+				},
+				{
+					path: 'profile',
+					name: 'edit-profile',
+					component: EditProfile
+				},
+				{
+					path: 'notifications',
+					name: 'edit-notifications',
+					component: EditNotifications
 				}
 			]
 		},
